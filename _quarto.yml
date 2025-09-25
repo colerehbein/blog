@@ -1,0 +1,22 @@
+project:
+  type: website
+
+website:
+  title: "cole.press blog"
+  description: "Thoughts on tech, AI, psychology, and politics."
+  site-url: "https://cole.press/blog"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: about.qmd
+        text: About
+    right:
+      - text: cole.press
+        href: https://cole.press
+  search: true
+  open-graph: true
+
+format:
+  html:
+    toc: true

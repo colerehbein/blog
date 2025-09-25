@@ -1,0 +1,7 @@
+---
+title: "About"
+---
+
+This is the official blog for Cole, where I share thoughts on technology, artificial intelligence, psychology, and politics.
+
+You can find more about me at [cole.press](https://cole.press).

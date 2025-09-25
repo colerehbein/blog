@@ -1,0 +1,54 @@
+name: Build & Deploy Blog
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.5.1'
+
+      - name: Install system libs
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libcurl4-openssl-dev libssl-dev libxml2-dev
+
+      - name: Install R deps
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          install-sysreqs: true
+          cache-version: 1
+          # If your blog repo lacks a DESCRIPTION that lists knitr/rmarkdown,
+          # uncomment these two lines:
+          # extra-packages: |
+          #   any::knitr
+          #   any::rmarkdown
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          tinytex: false
+
+      - name: Render
+        run: quarto render
+
+      - name: Deploy to Netlify (blog)
+        uses: nwtgck/actions-netlify@v2
+        with:
+          publish-dir: _site
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          alias: ""   # leave empty to deploy to primary site domain
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID:   ${{ secrets.BLOG_NETLIFY_SITE_ID }}
